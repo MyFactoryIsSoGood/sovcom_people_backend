@@ -7,24 +7,48 @@ import (
 )
 
 type AuthBody struct {
-	Phone    string `json:"phone" binding:"required"`
+	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
+}
+
+type SignUpBody struct {
+	Phone    string `json:"phone"`
+	Password string `json:"password" binding:"required"`
+	FullName string `json:"fullName" binding:"required"`
+	Email    string `json:"email" binding:"required"`
+	Role     uint   `json:"role" `
 }
 
 func Auth(c *gin.Context) {
 	body := AuthBody{}
 	err := c.ShouldBindJSON(&body)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	found, user := driver.CheckCredentials(body.Phone, body.Password)
+	found, user := driver.CheckCredentials(body.Email, body.Password)
 	if found {
 		c.JSON(http.StatusOK, user)
 		return
-	} else {
-		c.Status(http.StatusUnauthorized)
+	}
+	c.Status(http.StatusUnauthorized)
+	return
+}
+
+func SignUp(c *gin.Context) {
+	body := SignUpBody{}
+	err := c.ShouldBindJSON(&body)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	err, user := driver.CreateUser(body.Phone, body.Email, body.Password, body.FullName, body.Role)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, user)
+	return
 }

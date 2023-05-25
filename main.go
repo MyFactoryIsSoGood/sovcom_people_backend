@@ -3,6 +3,7 @@ package main
 import (
 	"awesomeProject/controllers"
 	"awesomeProject/db"
+	"awesomeProject/driver"
 	"awesomeProject/models"
 	"fmt"
 	"github.com/gin-contrib/cors"
@@ -34,15 +35,15 @@ func Initialize() {
 }
 
 func Mock() {
-	serzh := models.User{
-		FullName: "Serzh Galeta",
-		Role:     models.Applicant,
-		Email:    "galeta@mail.ru",
-		Phone:    "123",
-		Password: "123",
+	if found, _ := driver.GetUserByMail("galeta@mail.ru"); !found {
+		db.DB.Model(&models.User{}).Create(&models.User{
+			FullName: "Serzh Galeta",
+			Role:     models.Applicant,
+			Email:    "galeta@mail.ru",
+			Phone:    "123",
+			Password: "123",
+		})
 	}
-
-	db.DB.Model(&models.User{}).Create(&serzh)
 }
 
 func main() {
@@ -56,6 +57,7 @@ func main() {
 		context.Status(200)
 	})
 	app.POST("/auth", controllers.Auth)
+	app.POST("/signup", controllers.SignUp)
 
 	err := app.Run(os.Getenv("APP_PORT"))
 	if err != nil {

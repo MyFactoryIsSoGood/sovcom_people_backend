@@ -12,13 +12,17 @@ const Customer = 2
 const TestType = 0
 const CallType = 1
 
+const Searching = 0
+const Interview = 1
+const New = 2
+
 const Reject = 0
 const Invite = 1
 const Wait = 2
 
 type User struct {
 	gorm.Model
-	FullName string `json:"full_name"`
+	FullName string `json:"fullName"`
 	Role     uint   `json:"role"` // 0-кандидат 1-рекрутер 2-заказчик
 	Phone    string `json:"phone"`
 	Email    string `json:"email"`
@@ -32,14 +36,14 @@ type Vacancy struct {
 	Company     string            `json:"company"`
 	Description string            `json:"description"`
 	Templates   []VacancyTemplate `json:"templates"`
-	Status      int               `json:"status"` //Поиск, Собес, Новая
+	Status      uint              `json:"status"` //Поиск, Собес, Новая
 	Applies     []Apply           `json:"applies"`
 }
 
 type Apply struct {
 	gorm.Model
-	VacancyId uint   `json:"vacancy_id"`
-	CVId      uint   `json:"cv_id"`
+	VacancyId uint   `json:"vacancyId"`
+	CVId      uint   `json:"cvId"`
 	Comment   string `json:"comment"`
 	Status    uint   `json:"status"` // Отказ, Приглашение, На рассмотрении
 	Stages    []Stage
@@ -86,7 +90,7 @@ type CV struct {
 	gorm.Model
 	Title   string  `json:"title"`
 	About   string  `json:"about"`
-	UserID  uint    `json:"user_id"`
+	UserID  uint    `json:"userId"`
 	Applies []Apply `json:"applies"`
 }
 
@@ -102,6 +106,6 @@ type Experience struct {
 	Title       string    `json:"title"`
 	Subtitle    string    `json:"subtitle"`
 	Description string    `json:"description"`
-	DateFrom    time.Time `json:"date_from"`
-	DateTo      time.Time `json:"date_to"`
+	DateFrom    time.Time `json:"dateFrom"`
+	DateTo      time.Time `json:"dateTo"`
 }
