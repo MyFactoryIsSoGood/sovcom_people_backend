@@ -17,6 +17,7 @@ func Connect() error {
 		os.Getenv("DB_NAME"),
 		os.Getenv("DB_PASS"),
 		os.Getenv("DB_HOST"))
+	fmt.Println(args)
 
 	db, err := gorm.Open("postgres", args)
 
