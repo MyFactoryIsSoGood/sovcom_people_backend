@@ -5,9 +5,21 @@ import (
 	"time"
 )
 
+const Applicant = 0
+const Recruiter = 1
+const Customer = 2
+
+const TestType = 0
+const CallType = 1
+
+const Reject = 0
+const Invite = 1
+const Wait = 2
+
 type User struct {
 	gorm.Model
 	FullName string `json:"full_name"`
+	Role     uint   `json:"role"` // 0-кандидат 1-рекрутер 2-заказчик
 	Phone    string `json:"phone"`
 	Password string `json:"password"`
 	CVs      []CV   `json:"cvs"`

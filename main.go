@@ -1,7 +1,9 @@
 package main
 
 import (
+	"awesomeProject/controllers"
 	"awesomeProject/db"
+	"awesomeProject/models"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -20,12 +22,6 @@ func Initialize() {
 		}
 	}
 
-	args := fmt.Sprintf("user=%v dbname=%v password=%v sslmode=disable host=%v port=5432",
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_PASS"),
-		os.Getenv("DB_HOST"))
-	fmt.Println(args)
 	err := db.Connect()
 	if err != nil {
 		initErrors = append(initErrors, err.Error())
@@ -36,14 +32,26 @@ func Initialize() {
 	}
 }
 
+func Mock() {
+	db.DB.Model(&models.User{}).Create(models.User{
+		FullName: "Serzh Galeta",
+		Role:     models.Applicant,
+		Phone:    "123",
+		Password: "123",
+		CVs:      nil,
+	})
+}
+
 func main() {
 	Initialize()
+	Mock()
 
 	app := gin.Default()
 
 	app.GET("/", func(context *gin.Context) {
 		context.Status(200)
 	})
+	app.POST("/auth", controllers.Auth)
 
 	err := app.Run(os.Getenv("APP_PORT"))
 	if err != nil {
