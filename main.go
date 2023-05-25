@@ -41,6 +41,10 @@ func main() {
 
 	app := gin.Default()
 
+	app.GET("/", func(context *gin.Context) {
+		context.Status(200)
+	})
+
 	err := app.Run(os.Getenv("APP_PORT"))
 	if err != nil {
 		panic(err)
