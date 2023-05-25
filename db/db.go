@@ -12,7 +12,7 @@ var DB *gorm.DB
 
 func Connect() error {
 	//Docker config:
-	args := fmt.Sprintf("user=%v dbname=%v password=%v sslmode=disable host=%v port=5432",
+	args := fmt.Sprintf("user=%v dbname=%v password=%v sslmode=disable host=%v",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_NAME"),
 		os.Getenv("DB_PASS"),

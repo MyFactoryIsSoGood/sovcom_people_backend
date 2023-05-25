@@ -33,13 +33,14 @@ func Initialize() {
 }
 
 func Mock() {
-	db.DB.Model(&models.User{}).Create(models.User{
+	serzh := models.User{
 		FullName: "Serzh Galeta",
 		Role:     models.Applicant,
 		Phone:    "123",
 		Password: "123",
-		CVs:      nil,
-	})
+	}
+
+	db.DB.Model(&models.User{}).Create(&serzh)
 }
 
 func main() {
