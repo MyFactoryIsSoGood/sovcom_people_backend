@@ -59,6 +59,11 @@ func main() {
 	app.POST("/auth", controllers.Auth)
 	app.POST("/signup", controllers.SignUp)
 
+	//app.GET("/vacancies", controllers.GetVacanciesByFilters)
+	app.POST("/vacancies", controllers.PostVacancy)
+	app.GET("/vacancies", controllers.GetAllVacancies)
+	app.GET("/users/:id", controllers.GetUserById)
+
 	err := app.Run(os.Getenv("APP_PORT"))
 	if err != nil {
 		panic(err)

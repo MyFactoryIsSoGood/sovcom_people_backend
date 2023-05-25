@@ -42,19 +42,19 @@ type Vacancy struct {
 
 type Apply struct {
 	gorm.Model
-	VacancyId uint   `json:"vacancyId"`
-	CVId      uint   `json:"cvId"`
-	Comment   string `json:"comment"`
-	Status    uint   `json:"status"` // Отказ, Приглашение, На рассмотрении
-	Stages    []Stage
+	VacancyId uint    `json:"vacancyId"`
+	CVId      uint    `json:"cvId"`
+	Comment   string  `json:"comment"`
+	Status    uint    `json:"status"` // Отказ, Приглашение, На рассмотрении
+	Stages    []Stage `json:"stages"`
 }
 
 type Stage struct {
 	gorm.Model
 	Type   uint `json:"type"` // 0-test 1-call
 	Rating uint `json:"rating"`
-	Test   Test
-	Call   Call
+	Test   Test `json:"test"`
+	Call   Call `json:"call"`
 }
 
 type Call struct {
@@ -62,17 +62,17 @@ type Call struct {
 
 type Test struct {
 	gorm.Model
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Questions   []Question
+	Title       string     `json:"title"`
+	Description string     `json:"description"`
+	Questions   []Question `json:"questions"`
 }
 
 type Question struct {
 	gorm.Model
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Variants    []QuestionVariant
-	Answer      QuestionVariant
+	Title       string            `json:"title"`
+	Description string            `json:"description"`
+	Variants    []QuestionVariant `json:"variants"`
+	Answer      QuestionVariant   `json:"answer"`
 }
 
 type QuestionVariant struct {
@@ -88,17 +88,17 @@ type VacancyTemplate struct {
 
 type CV struct {
 	gorm.Model
-	Title   string  `json:"title"`
-	About   string  `json:"about"`
-	UserID  uint    `json:"userId"`
-	Applies []Apply `json:"applies"`
+	Title   string       `json:"title"`
+	About   string       `json:"about"`
+	UserID  uint         `json:"userId"`
+	Blocks  []CVTemplate `json:"blocks"`
+	Applies []Apply      `json:"applies"`
 }
 
 type CVTemplate struct {
 	gorm.Model
-	Title       string       `json:"title"`
-	Description string       `json:"description"`
-	Blocks      []Experience `json:"blocks"`
+	Title   string       `json:"title"`
+	Strokes []Experience `json:"strokes"`
 }
 
 type Experience struct {
