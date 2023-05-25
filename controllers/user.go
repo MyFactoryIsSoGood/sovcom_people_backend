@@ -18,7 +18,7 @@ func GetUserById(c *gin.Context) {
 	var user *models.User
 	found, user := driver.GetUserById(id)
 	if !found {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Not found"})
 		return
 	}
 	c.JSON(http.StatusOK, &user)
