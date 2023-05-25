@@ -29,7 +29,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123qwe123
-      POSTGRES_DB: hezzl_test
+      POSTGRES_DB: sovcom_people
   app:
     networks:
       - new
