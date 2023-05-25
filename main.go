@@ -20,6 +20,12 @@ func Initialize() {
 		}
 	}
 
+	args := fmt.Sprintf("user=%v dbname=%v password=%v sslmode=disable host=%v port=5432",
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_NAME"),
+		os.Getenv("DB_PASS"),
+		os.Getenv("DB_HOST"))
+	fmt.Println(args)
 	err := db.Connect()
 	if err != nil {
 		initErrors = append(initErrors, err.Error())
