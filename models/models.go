@@ -21,6 +21,7 @@ type User struct {
 	FullName string `json:"full_name"`
 	Role     uint   `json:"role"` // 0-кандидат 1-рекрутер 2-заказчик
 	Phone    string `json:"phone"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
 	CVs      []CV   `json:"cvs"`
 }

@@ -5,6 +5,7 @@ import (
 	"awesomeProject/db"
 	"awesomeProject/models"
 	"fmt"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -36,6 +37,7 @@ func Mock() {
 	serzh := models.User{
 		FullName: "Serzh Galeta",
 		Role:     models.Applicant,
+		Email:    "galeta@mail.ru",
 		Phone:    "123",
 		Password: "123",
 	}
@@ -48,6 +50,7 @@ func main() {
 	Mock()
 
 	app := gin.Default()
+	app.Use(cors.Default())
 
 	app.GET("/", func(context *gin.Context) {
 		context.Status(200)
