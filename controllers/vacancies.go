@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"awesomeProject/db"
+	"awesomeProject/driver"
 	"awesomeProject/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -20,7 +21,6 @@ type CreateVacancyBody struct {
 func GetAllVacancies(c *gin.Context) {
 	var vacancies []models.Vacancy
 
-	// Retrieve all vacancies from the database and preload associated templates and applies
 	err := db.DB.Model(&models.Vacancy{}).Preload("Templates").Find(&vacancies).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch vacancies"})
@@ -38,29 +38,27 @@ func PostVacancy(c *gin.Context) {
 		return
 	}
 
-	// Create a new Vacancy instance
 	newVacancy := models.Vacancy{
 		Title:       vacancy.Title,
 		Company:     vacancy.Company,
 		Description: vacancy.Description,
-		Status:      models.New,
+		Status:      models.Searching,
 	}
 
-	// Save the new vacancy to the database
-	err = db.DB.Create(&newVacancy).Error
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create vacancy"})
-		return
-	}
-
+	var templates []models.VacancyTemplate
 	for _, template := range vacancy.Templates {
 		newTemplate := models.VacancyTemplate{
 			VacancyId:   newVacancy.ID,
 			Title:       template.Title,
 			Description: template.Description,
 		}
+		templates = append(templates, newTemplate)
+	}
 
-		db.DB.Model(&models.VacancyTemplate{}).Create(&newTemplate)
+	err, newVacancy = driver.CreateVacancy(newVacancy, templates)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusOK, newVacancy)
