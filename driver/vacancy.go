@@ -42,8 +42,13 @@ func GetVacancyById(id int) (bool, *VacancyResponse) {
 
 		_, cv = GetCVById(int(apply.CVId))
 		_, user = GetUserById(int(cv.UserID))
-		fullCv := FullCV{Title: cv.Title, About: cv.About, User: *user, Blocks: cv.Blocks}
+		fullCv := FullCV{Model: gorm.Model{ID: apply.ID,
+			CreatedAt: apply.CreatedAt,
+		}, Title: cv.Title, About: cv.About, User: *user, Blocks: cv.Blocks}
 		fullApplies = append(fullApplies, FullApply{
+			Model: gorm.Model{ID: apply.ID,
+				CreatedAt: apply.CreatedAt,
+			},
 			CV:      fullCv,
 			Comment: apply.Comment,
 			Status:  apply.Status,
