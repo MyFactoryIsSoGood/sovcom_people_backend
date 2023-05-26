@@ -35,7 +35,7 @@ func GetVacancyById(id int) (bool, *VacancyResponse) {
 	var vacancy models.Vacancy
 	var fullApplies []FullApply
 
-	db.DB.Model(&models.Vacancy{}).Preload("Templates").Preload("Applies.Stages").Preload("Stages").Find(&vacancy, id)
+	db.DB.Model(&models.Vacancy{}).Preload("Templates").Preload("Applies.Stages").Find(&vacancy, id)
 	for _, apply := range vacancy.Applies {
 		var cv *models.CV
 		var user *models.User
