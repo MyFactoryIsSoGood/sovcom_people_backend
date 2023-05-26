@@ -21,7 +21,7 @@ func GetAllVacancies(c *gin.Context) {
 	var vacancies []models.Vacancy
 
 	// Retrieve all vacancies from the database and preload associated templates and applies
-	err := db.DB.Preload("Templates").Find(&vacancies).Error
+	err := db.DB.Model(&models.Vacancy{}).Preload("Templates").Find(&vacancies).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch vacancies"})
 		return
@@ -43,7 +43,7 @@ func PostVacancy(c *gin.Context) {
 		Title:       vacancy.Title,
 		Company:     vacancy.Company,
 		Description: vacancy.Description,
-		Status:      models.Searching,
+		Status:      models.New,
 	}
 
 	// Save the new vacancy to the database
@@ -52,17 +52,15 @@ func PostVacancy(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create vacancy"})
 		return
 	}
+
 	for _, template := range vacancy.Templates {
 		newTemplate := models.VacancyTemplate{
+			VacancyId:   newVacancy.ID,
 			Title:       template.Title,
 			Description: template.Description,
 		}
-		err = db.DB.Create(&newTemplate).Error
-		db.DB.Model(&newTemplate).Association("Vacancy").Append(newVacancy)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create template"})
-			return
-		}
+
+		db.DB.Model(&models.VacancyTemplate{}).Create(&newTemplate)
 	}
 
 	c.JSON(http.StatusOK, newVacancy)

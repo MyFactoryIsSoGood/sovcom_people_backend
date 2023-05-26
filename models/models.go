@@ -51,10 +51,11 @@ type Apply struct {
 
 type Stage struct {
 	gorm.Model
-	Type   uint `json:"type"` // 0-test 1-call
-	Rating uint `json:"rating"`
-	Test   Test `json:"test"`
-	Call   Call `json:"call"`
+	ApplyId uint `json:"applyId"`
+	Type    uint `json:"type"` // 0-test 1-call
+	Rating  uint `json:"rating"`
+	Test    Test `json:"test"`
+	Call    Call `json:"call"`
 }
 
 type Call struct {
@@ -69,6 +70,7 @@ type Test struct {
 
 type Question struct {
 	gorm.Model
+	TestId      uint              `json:"testId"`
 	Title       string            `json:"title"`
 	Description string            `json:"description"`
 	Variants    []QuestionVariant `json:"variants"`
@@ -77,11 +79,13 @@ type Question struct {
 
 type QuestionVariant struct {
 	gorm.Model
-	Text string `json:"text"`
+	QuestionId uint   `json:"questionId"`
+	Text       string `json:"text"`
 }
 
 type VacancyTemplate struct {
 	gorm.Model
+	VacancyId   uint   `json:"vacancyId"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
 }
@@ -97,15 +101,17 @@ type CV struct {
 
 type CVTemplate struct {
 	gorm.Model
+	CVId    uint         `json:"cvId"`
 	Title   string       `json:"title"`
 	Strokes []Experience `json:"strokes"`
 }
 
 type Experience struct {
 	gorm.Model
-	Title       string    `json:"title"`
-	Subtitle    string    `json:"subtitle"`
-	Description string    `json:"description"`
-	DateFrom    time.Time `json:"dateFrom"`
-	DateTo      time.Time `json:"dateTo"`
+	CVTemplateId uint      `json:"CVTemplateId"`
+	Title        string    `json:"title"`
+	Subtitle     string    `json:"subtitle"`
+	Description  string    `json:"description"`
+	DateFrom     time.Time `json:"dateFrom"`
+	DateTo       time.Time `json:"dateTo"`
 }
