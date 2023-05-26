@@ -38,6 +38,7 @@ services:
   app:
     networks:
       - new
+    container_name: app
     build:
       context: .
       dockerfile: Dockerfile
