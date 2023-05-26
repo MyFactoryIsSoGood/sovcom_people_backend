@@ -58,8 +58,8 @@ func main() {
 	api := app.Group("/api")
 	api.Use(middleware.AuthMiddleware())
 
-	auth.POST("/", controllers.Auth)
-	auth.POST("/signup", controllers.SignUp)
+	auth.POST("/signIn", controllers.Auth)
+	auth.POST("/signUp", controllers.SignUp)
 
 	//app.GET("/vacancies", controllers.GetVacanciesByFilters)
 	api.POST("/vacancies", controllers.PostVacancy)
