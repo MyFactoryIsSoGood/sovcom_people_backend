@@ -27,7 +27,7 @@ func GetUserByMail(email string) (bool, *models.User) {
 	return false, &models.User{}
 }
 
-func CreateUser(phone, email, password, fullName string, role uint) (error, *models.User) { // лупим хакатон без проверок, регистрации и смс
+func CreateUser(phone, email, password, fullName string, role uint) (error, *models.User) {
 	if found, user := GetUserByMail(email); found {
 		return errors.New("already exists"), user
 	}

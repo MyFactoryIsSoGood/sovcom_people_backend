@@ -4,6 +4,7 @@ import (
 	"awesomeProject/controllers"
 	"awesomeProject/db"
 	"awesomeProject/driver"
+	"awesomeProject/middleware"
 	"awesomeProject/models"
 	"fmt"
 	"github.com/gin-contrib/cors"
@@ -53,17 +54,18 @@ func main() {
 	app := gin.Default()
 	app.Use(cors.Default())
 
-	app.GET("/", func(context *gin.Context) {
-		context.Status(200)
-	})
-	app.POST("/auth", controllers.Auth)
-	app.POST("/signup", controllers.SignUp)
+	auth := app.Group("/auth")
+	api := app.Group("/api")
+	api.Use(middleware.AuthMiddleware())
+
+	auth.POST("/", controllers.Auth)
+	auth.POST("/signup", controllers.SignUp)
 
 	//app.GET("/vacancies", controllers.GetVacanciesByFilters)
-	app.POST("/vacancies", controllers.PostVacancy)
-	app.GET("/vacancies", controllers.GetAllVacancies)
-	app.GET("/users/:id", controllers.GetUserById)
-	app.POST("/vacancies/:id", controllers.GetVacancyById)
+	api.POST("/vacancies", controllers.PostVacancy)
+	api.GET("/vacancies", controllers.GetAllVacancies)
+	api.GET("/users/:id", controllers.GetUserById)
+	api.POST("/vacancies/:id", controllers.GetVacancyById)
 
 	err := app.Run(os.Getenv("APP_PORT"))
 	if err != nil {
