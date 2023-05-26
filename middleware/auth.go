@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"awesomeProject/driver"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -33,7 +32,6 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		c.Set("userID", id)
-		fmt.Println("auth")
 		c.Next()
 	}
 }

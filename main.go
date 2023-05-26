@@ -7,7 +7,6 @@ import (
 	"awesomeProject/middleware"
 	"awesomeProject/models"
 	"fmt"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -52,12 +51,10 @@ func main() {
 	Mock()
 
 	app := gin.Default()
-	app.Use(cors.Default())
+	app.Use(middleware.CORSMiddleware())
 
 	auth := app.Group("/auth")
-	api := app.Group("/api")
-	api.Use(cors.Default())
-	api.Use(middleware.AuthMiddleware())
+	api := app.Group("/api", middleware.AuthMiddleware())
 
 	auth.POST("/signIn", controllers.Auth)
 	auth.POST("/signUp", controllers.SignUp)
