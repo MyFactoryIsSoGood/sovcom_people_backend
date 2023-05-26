@@ -25,7 +25,20 @@ func Connect() error {
 		return err
 	}
 
-	db.AutoMigrate(&models.User{}, &models.Vacancy{}, &models.CV{}, &models.Experience{}, &models.VacancyTemplate{}, &models.CVTemplate{}, &models.Apply{})
+	db.AutoMigrate(
+		&models.User{},
+		&models.Vacancy{},
+		&models.CV{},
+		&models.Experience{},
+		&models.VacancyTemplate{},
+		&models.CVTemplate{},
+		&models.Apply{},
+		&models.Test{},
+		&models.Call{},
+		&models.Question{},
+		&models.QuestionVariant{},
+		&models.Stage{},
+	)
 	DB = db
 	return nil
 }

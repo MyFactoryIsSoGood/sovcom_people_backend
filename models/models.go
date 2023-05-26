@@ -15,6 +15,7 @@ const CallType = 1
 const Searching = 0
 const Interview = 1
 const New = 2
+const Closed = 3
 
 const Reject = 0
 const Invite = 1
@@ -73,8 +74,8 @@ type Question struct {
 	TestId      uint              `json:"testId"`
 	Title       string            `json:"title"`
 	Description string            `json:"description"`
+	Answer      string            `json:"answer"`
 	Variants    []QuestionVariant `json:"variants"`
-	Answer      QuestionVariant   `json:"answer"`
 }
 
 type QuestionVariant struct {

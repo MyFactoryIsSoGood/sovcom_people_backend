@@ -17,7 +17,6 @@ import (
 // Initialize инициализирует все необходимые подключения и зависимости
 func Initialize() {
 	var initErrors []string
-
 	if os.Getenv("APP_ENV") == "" || os.Getenv("APP_ENV") == "local" {
 		if err := godotenv.Load(); err != nil {
 			initErrors = append(initErrors, err.Error())
@@ -59,11 +58,17 @@ func main() {
 	auth.POST("/signIn", controllers.Auth)
 	auth.POST("/signUp", controllers.SignUp)
 
-	//app.GET("/vacancies", controllers.GetVacanciesByFilters)
+	api.GET("/users/:id", controllers.GetUserById)
+
 	api.POST("/vacancies", controllers.PostVacancy)
 	api.GET("/vacancies", controllers.GetAllVacancies)
-	api.GET("/users/:id", controllers.GetUserById)
-	api.POST("/vacancies/:id", controllers.GetVacancyById)
+	api.GET("/vacancies/:id", controllers.GetVacancyById)
+
+	api.POST("/cv", controllers.PostCV)
+	//
+	api.POST("/applies", controllers.PostApply)
+	//api.GET("/vacancy/:id/applies", controllers.GetVacancyApplies)
+	api.POST("/testTask", controllers.PostTestTask)
 
 	err := app.Run(os.Getenv("APP_PORT"))
 	if err != nil {
