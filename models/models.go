@@ -65,6 +65,7 @@ type Call struct {
 type Test struct {
 	gorm.Model
 	Title       string     `json:"title"`
+	ApplyId     uint       `json:"applyId"`
 	Description string     `json:"description"`
 	Questions   []Question `json:"questions"`
 }
