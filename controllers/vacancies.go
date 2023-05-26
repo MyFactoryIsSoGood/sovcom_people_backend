@@ -6,6 +6,7 @@ import (
 	"awesomeProject/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 type CreateVacancyBody struct {
@@ -28,6 +29,22 @@ func GetAllVacancies(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, vacancies)
+}
+
+func GetVacancyById(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var vacancy *models.Vacancy
+	found, vacancy := driver.GetVacancyById(id)
+	if !found {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Not found"})
+		return
+	}
+	c.JSON(http.StatusOK, &vacancy)
 }
 
 func PostVacancy(c *gin.Context) {

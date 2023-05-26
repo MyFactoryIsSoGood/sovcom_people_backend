@@ -10,7 +10,7 @@ func CheckCredentials(email, pass string) (bool, *models.User) {
 	var user models.User
 	db.DB.Model(&models.User{}).Where("email = ? AND password = ?", email, pass).First(&user)
 
-	if user.Phone != "" {
+	if user.Email != "" {
 		return true, &user
 	}
 	return false, &models.User{}
