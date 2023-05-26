@@ -38,7 +38,7 @@ func GetVacancyById(c *gin.Context) {
 		return
 	}
 
-	var vacancy *models.Vacancy
+	var vacancy *driver.VacancyResponse
 	found, vacancy := driver.GetVacancyById(id)
 	if !found {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Not found"})

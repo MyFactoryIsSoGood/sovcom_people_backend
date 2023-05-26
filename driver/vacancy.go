@@ -3,17 +3,67 @@ package driver
 import (
 	"awesomeProject/db"
 	"awesomeProject/models"
+	"github.com/jinzhu/gorm"
 )
 
-func GetVacancyById(id int) (bool, *models.Vacancy) {
-	var vacancy models.Vacancy
+type FullCV struct {
+	gorm.Model
+	Title  string              `json:"title"`
+	About  string              `json:"about"`
+	User   models.User         `json:"user"`
+	Blocks []models.CVTemplate `json:"blocks"`
+}
 
-	db.DB.Model(&models.Vacancy{}).Where("id = ?", id).Scan(&vacancy)
-	if vacancy.Title != "" {
-		return true, &vacancy
+type FullApply struct {
+	gorm.Model
+	CV      FullCV         `json:"cv"`
+	Comment string         `json:"comment"`
+	Status  uint           `json:"status"`
+	Stages  []models.Stage `json:"stages"`
+}
+
+type VacancyResponse struct {
+	Title       string                   `json:"title"`
+	Company     string                   `json:"company"`
+	Description string                   `json:"description"`
+	Templates   []models.VacancyTemplate `json:"templates"`
+	Status      uint                     `json:"status"`
+	Applies     []FullApply              `json:"applies"`
+}
+
+func GetVacancyById(id int) (bool, *VacancyResponse) {
+	var vacancy models.Vacancy
+	var fullApplies []FullApply
+
+	db.DB.Model(&models.Vacancy{}).Preload("Templates").Preload("Applies.Stages").Preload("Stages").Find(&vacancy, id)
+	for _, apply := range vacancy.Applies {
+		var cv *models.CV
+		var user *models.User
+
+		_, cv = GetCVById(int(apply.CVId))
+		_, user = GetUserById(int(cv.UserID))
+		fullCv := FullCV{Title: cv.Title, About: cv.About, User: *user, Blocks: cv.Blocks}
+		fullApplies = append(fullApplies, FullApply{
+			CV:      fullCv,
+			Comment: apply.Comment,
+			Status:  apply.Status,
+			Stages:  apply.Stages,
+		})
 	}
 
-	return false, &models.Vacancy{}
+	if vacancy.Title != "" {
+		resp := VacancyResponse{
+			Title:       vacancy.Title,
+			Company:     vacancy.Company,
+			Description: vacancy.Description,
+			Templates:   vacancy.Templates,
+			Status:      vacancy.Status,
+			Applies:     fullApplies,
+		}
+		return true, &resp
+	}
+
+	return false, &VacancyResponse{}
 }
 
 func CreateVacancy(vacancy models.Vacancy, templates []models.VacancyTemplate) (error, models.Vacancy) {
