@@ -56,6 +56,7 @@ func main() {
 
 	auth := app.Group("/auth")
 	api := app.Group("/api")
+	api.Use(cors.Default())
 	api.Use(middleware.AuthMiddleware())
 
 	auth.POST("/signIn", controllers.Auth)
