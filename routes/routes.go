@@ -23,6 +23,7 @@ func InitializeRoutes(app *gin.Engine) {
 	api.POST("/vacancies", controllers.PostVacancy)
 	api.GET("/vacancies", controllers.GetAllVacancies)
 	api.GET("/vacancies/:id", controllers.GetVacancyById)
+	api.GET("/vacancies/:id/applies", controllers.GetVacancyApplies)
 
 	api.POST("/cv", controllers.PostCV)
 	api.GET("/cv/:id", controllers.GetCVById)

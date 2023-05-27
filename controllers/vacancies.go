@@ -121,3 +121,19 @@ func UpdateVacancy(c *gin.Context) {
 	_, resp := driver.GetVacancyById(id)
 	c.JSON(http.StatusOK, resp)
 }
+
+func GetVacancyApplies(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var vacancy *driver.VacancyResponse
+	found, vacancy := driver.GetVacancyById(id)
+	if !found {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Not found"})
+		return
+	}
+	c.JSON(http.StatusOK, &vacancy.Applies)
+}
