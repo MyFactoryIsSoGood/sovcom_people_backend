@@ -4,6 +4,7 @@ import (
 	"awesomeProject/db"
 	"awesomeProject/driver"
 	"awesomeProject/models"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -79,4 +80,44 @@ func PostVacancy(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, newVacancy)
+}
+
+func UpdateVacancy(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var vacancy models.Vacancy
+	db.DB.Model(&models.Vacancy{}).Preload("Templates").Find(&vacancy, id)
+
+	var newVacancy CreateVacancyBody
+	err = c.ShouldBindJSON(&newVacancy)
+	fmt.Println(newVacancy)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	for _, template := range vacancy.Templates {
+		db.DB.Model(&models.VacancyTemplate{}).Delete(&template)
+	}
+	vacancy.Templates = []models.VacancyTemplate{}
+	for _, template := range newVacancy.Templates {
+		newTemplate := models.VacancyTemplate{
+			VacancyId:   vacancy.ID,
+			Title:       template.Title,
+			Description: template.Description,
+		}
+		db.DB.Model(&models.VacancyTemplate{}).Create(&newTemplate)
+	}
+
+	vacancy.Title = newVacancy.Title
+	vacancy.Company = newVacancy.Company
+	vacancy.Description = newVacancy.Description
+	db.DB.Model(&models.Vacancy{}).Update(&vacancy)
+
+	_, resp := driver.GetVacancyById(id)
+	c.JSON(http.StatusOK, resp)
 }

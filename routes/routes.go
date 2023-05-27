@@ -17,8 +17,9 @@ func InitializeRoutes(app *gin.Engine) {
 
 	api.GET("/users/:id", controllers.GetUserById)
 	api.GET("/users", controllers.GetAllUsers)
-	api.GET("/users/appliedTo/:id", controllers.IfAppliedToVacancy)
+	api.GET("/vacancies/:id/applyStatus", controllers.IfAppliedToVacancy)
 
+	api.PUT("/vacancies/:id", controllers.UpdateVacancy)
 	api.POST("/vacancies", controllers.PostVacancy)
 	api.GET("/vacancies", controllers.GetAllVacancies)
 	api.GET("/vacancies/:id", controllers.GetVacancyById)
