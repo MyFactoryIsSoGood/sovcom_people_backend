@@ -23,6 +23,7 @@ type FullApply struct {
 }
 
 type VacancyResponse struct {
+	ID          uint                     `json:"ID"`
 	Title       string                   `json:"title"`
 	Company     string                   `json:"company"`
 	Description string                   `json:"description"`
@@ -58,6 +59,7 @@ func GetVacancyById(id int) (bool, *VacancyResponse) {
 
 	if vacancy.Title != "" {
 		resp := VacancyResponse{
+			ID:          vacancy.ID,
 			Title:       vacancy.Title,
 			Company:     vacancy.Company,
 			Description: vacancy.Description,
