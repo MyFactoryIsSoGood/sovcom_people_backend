@@ -15,3 +15,10 @@ func GetUserById(id int) (bool, *models.User) {
 
 	return false, &models.User{}
 }
+
+func GetUsers() []models.User {
+	var users []models.User
+
+	db.DB.Model(&models.User{}).Preload("CVs").Find(&users)
+	return users
+}

@@ -27,7 +27,7 @@ func GetUserByMail(email string) (bool, *models.User) {
 	return false, &models.User{}
 }
 
-func CreateUser(phone, email, password, fullName string, role uint) (error, *models.User) {
+func CreateUser(phone, email, password, fullName, location, workMode string, role uint) (error, *models.User) {
 	if found, user := GetUserByMail(email); found {
 		return errors.New("already exists"), user
 	}
@@ -35,6 +35,8 @@ func CreateUser(phone, email, password, fullName string, role uint) (error, *mod
 	var user = models.User{
 		FullName: fullName,
 		Role:     role,
+		Location: location,
+		WorkMode: workMode,
 		Phone:    phone,
 		Email:    email,
 		Password: password,

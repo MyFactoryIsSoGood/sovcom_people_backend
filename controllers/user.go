@@ -23,3 +23,10 @@ func GetUserById(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, &user)
 }
+
+func GetAllUsers(c *gin.Context) {
+	var users []models.User
+	users = driver.GetUsers()
+
+	c.JSON(http.StatusOK, users)
+}

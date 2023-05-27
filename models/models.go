@@ -24,6 +24,8 @@ const Wait = 2
 type User struct {
 	gorm.Model
 	FullName string `json:"fullName"`
+	Location string `json:"location"`
+	WorkMode string `json:"workMode"`
 	Role     uint   `json:"role"` // 0-кандидат 1-рекрутер 2-заказчик
 	Phone    string `json:"phone"`
 	Email    string `json:"email"`

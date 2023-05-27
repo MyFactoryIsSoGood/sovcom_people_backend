@@ -14,6 +14,8 @@ type AuthBody struct {
 type SignUpBody struct {
 	Phone    string `json:"phone"`
 	Password string `json:"password" binding:"required"`
+	Location string `json:"location"`
+	WorkMode string `json:"workMode"`
 	FullName string `json:"fullName" binding:"required"`
 	Email    string `json:"email" binding:"required"`
 	Role     uint   `json:"role" `
@@ -44,7 +46,7 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
-	err, user := driver.CreateUser(body.Phone, body.Email, body.Password, body.FullName, body.Role)
+	err, user := driver.CreateUser(body.Phone, body.Email, body.Password, body.FullName, body.Location, body.WorkMode, body.Role)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

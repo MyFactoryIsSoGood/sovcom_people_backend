@@ -4,6 +4,7 @@ import (
 	"awesomeProject/controllers"
 	"awesomeProject/db"
 	"awesomeProject/driver"
+	"awesomeProject/mail"
 	"awesomeProject/middleware"
 	"awesomeProject/models"
 	"fmt"
@@ -46,6 +47,7 @@ func Mock() {
 }
 
 func main() {
+	mail.SendMail("", "")
 	Initialize()
 	Mock()
 
@@ -59,13 +61,14 @@ func main() {
 	auth.POST("/signUp", controllers.SignUp)
 
 	api.GET("/users/:id", controllers.GetUserById)
+	api.GET("/users", controllers.GetAllUsers)
 
 	api.POST("/vacancies", controllers.PostVacancy)
 	api.GET("/vacancies", controllers.GetAllVacancies)
 	api.GET("/vacancies/:id", controllers.GetVacancyById)
 
 	api.POST("/cv", controllers.PostCV)
-	//
+
 	api.POST("/applies", controllers.PostApply)
 	//api.GET("/vacancy/:id/applies", controllers.GetVacancyApplies)
 	api.POST("/testTask", controllers.PostTestTask)
