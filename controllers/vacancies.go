@@ -10,8 +10,8 @@ import (
 )
 
 type CreateVacancyBody struct {
-	Title       string `json:"title"`
-	Company     string `json:"company"`
+	Title       string `json:"title" binding:"required"`
+	Company     string `json:"company" binding:"required"`
 	Description string `json:"description"`
 	Templates   []struct {
 		Title       string `json:"title"`
