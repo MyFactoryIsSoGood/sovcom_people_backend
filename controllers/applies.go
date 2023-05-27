@@ -2,9 +2,11 @@ package controllers
 
 import (
 	"awesomeProject/db"
+	"awesomeProject/driver"
 	"awesomeProject/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 //func PostApply(c *gin.Context) {
@@ -108,4 +110,20 @@ func PostApply(c *gin.Context) {
 	var resp models.Apply
 	db.DB.Model(&models.Apply{}).Preload("Stages").Find(&resp, newApply.ID)
 	c.JSON(http.StatusOK, resp)
+}
+
+func GetCVById(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var cv *models.CV
+	found, cv := driver.GetCVById(id)
+	if !found {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Not found"})
+		return
+	}
+	c.JSON(http.StatusOK, &cv)
 }
