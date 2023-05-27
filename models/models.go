@@ -5,21 +5,21 @@ import (
 	"time"
 )
 
-const Applicant = 0
-const Recruiter = 1
-const Customer = 2
+const Applicant = 1
+const Recruiter = 2
+const Customer = 3
 
-const TestType = 0
-const CallType = 1
+const TestType = 1
+const CallType = 2
 
-const Searching = 0
-const Interview = 1
-const New = 2
-const Closed = 3
+const Searching = 1
+const Interview = 2
+const New = 3
+const Closed = 4
 
-const Reject = 0
-const Invite = 1
-const Wait = 2
+const Reject = 1
+const Invite = 2
+const Wait = 3
 
 type User struct {
 	gorm.Model
