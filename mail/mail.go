@@ -16,7 +16,7 @@ func SendMail(name, vacancy string) {
 	m.SetHeader("From", from)
 
 	// Set E-Mail receivers
-	m.SetHeader("To", "myfactoryisgood@gmail.com")
+	m.SetHeader("To", from)
 
 	// Set E-Mail subject
 	m.SetHeader("Subject", "Gomail test subject")

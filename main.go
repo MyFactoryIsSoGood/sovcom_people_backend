@@ -3,7 +3,6 @@ package main
 import (
 	"awesomeProject/db"
 	"awesomeProject/driver"
-	"awesomeProject/mail"
 	"awesomeProject/models"
 	"awesomeProject/routes"
 	"fmt"
@@ -28,6 +27,11 @@ func Initialize() {
 		initErrors = append(initErrors, err.Error())
 	}
 
+	//err = cache.Connect()
+	//if err != nil {
+	//	initErrors = append(initErrors, err.Error())
+	//}
+
 	if len(initErrors) != 0 {
 		panic(fmt.Sprintf("Запуск приложения невозможен из-за следующих ошибок инициализации:\n %s", strings.Join(initErrors, ",\n")))
 	}
@@ -46,7 +50,7 @@ func Mock() {
 }
 
 func main() {
-	mail.SendMail("", "")
+	//mail.SendMail("", "")
 	Initialize()
 	Mock()
 

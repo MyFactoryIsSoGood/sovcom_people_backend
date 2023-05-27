@@ -30,3 +30,16 @@ func GetAllUsers(c *gin.Context) {
 
 	c.JSON(http.StatusOK, users)
 }
+
+func IfAppliedToVacancy(c *gin.Context) {
+	vacancyId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	userId := c.GetInt("userID")
+
+	appliedToVacancy := driver.IfAppliedToVacancy(vacancyId, userId)
+	c.JSON(http.StatusOK, gin.H{"applied": appliedToVacancy})
+}
